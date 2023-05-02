@@ -6,7 +6,67 @@ void setup() {
 	Serial.begin(115200);
 }
 
-void loop(int SAMPLE_RATE, int INPUT_PIN) {
+void loop_EMG(int SAMPLE_RATE, int INPUT_PIN) {
+	// Calculate elapsed time
+	static unsigned long past = 0;
+	unsigned long present = micros();
+	unsigned long interval = present - past;
+	past = present;
+
+	// Run timer
+	static long timer = 0;
+	timer -= interval;
+
+	// Sample
+	if(timer < 0){
+		timer += 1000000 / SAMPLE_RATE;
+		float sensor_value = analogRead(INPUT_PIN);
+		float signal = EMGFilter(sensor_value);
+		Serial.println(signal);
+	}
+}
+
+void loop_EEG(int SAMPLE_RATE, int INPUT_PIN) {
+	// Calculate elapsed time
+	static unsigned long past = 0;
+	unsigned long present = micros();
+	unsigned long interval = present - past;
+	past = present;
+
+	// Run timer
+	static long timer = 0;
+	timer -= interval;
+
+	// Sample
+	if(timer < 0){
+		timer += 1000000 / SAMPLE_RATE;
+		float sensor_value = analogRead(INPUT_PIN);
+		float signal = EMGFilter(sensor_value);
+		Serial.println(signal);
+	}
+}
+
+void loop_ECG(int SAMPLE_RATE, int INPUT_PIN) {
+	// Calculate elapsed time
+	static unsigned long past = 0;
+	unsigned long present = micros();
+	unsigned long interval = present - past;
+	past = present;
+
+	// Run timer
+	static long timer = 0;
+	timer -= interval;
+
+	// Sample
+	if(timer < 0){
+		timer += 1000000 / SAMPLE_RATE;
+		float sensor_value = analogRead(INPUT_PIN);
+		float signal = EMGFilter(sensor_value);
+		Serial.println(signal);
+	}
+}
+
+void loop_EOG(int SAMPLE_RATE, int INPUT_PIN) {
 	// Calculate elapsed time
 	static unsigned long past = 0;
 	unsigned long present = micros();
