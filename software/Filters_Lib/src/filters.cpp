@@ -1,90 +1,115 @@
-#include "Arduino.h"
-#include "filters.hpp"
+#include "filters.h"
 
-void setup() {
-	// Serial connection begin
-	Serial.begin(115200);
-}
+int data_index = 0;
 
-void loop_EMG(int SAMPLE_RATE, int INPUT_PIN) {
-	// Calculate elapsed time
+
+float Filters::timer()
+{
+  // Calculate elapsed time
 	static unsigned long past = 0;
 	unsigned long present = micros();
 	unsigned long interval = present - past;
 	past = present;
 
 	// Run timer
-	static long timer = 0;
-	timer -= interval;
+	static long time = 0;
+	time -= interval;
+
+  return time;
+
+}
+
+float Filters::EMG_read(int SAMPLE_RATE, int INPUT_PIN) {
+	
 
 	// Sample
-	if(timer < 0){
-		timer += 1000000 / SAMPLE_RATE;
+	if(timer() < 0){
+		timer() += 1000000 / SAMPLE_RATE;
 		float sensor_value = analogRead(INPUT_PIN);
 		float signal = EMGFilter(sensor_value);
 		Serial.println(signal);
 	}
 }
 
-void loop_EEG(int SAMPLE_RATE, int INPUT_PIN) {
-	// Calculate elapsed time
-	static unsigned long past = 0;
-	unsigned long present = micros();
-	unsigned long interval = present - past;
-	past = present;
-
-	// Run timer
-	static long timer = 0;
-	timer -= interval;
+float Filters::EEG_read(int SAMPLE_RATE, int INPUT_PIN) {
+	
 
 	// Sample
-	if(timer < 0){
-		timer += 1000000 / SAMPLE_RATE;
+	if(timer() < 0){
+		timer() += 1000000 / SAMPLE_RATE;
 		float sensor_value = analogRead(INPUT_PIN);
 		float signal = EMGFilter(sensor_value);
 		Serial.println(signal);
 	}
 }
 
-void loop_ECG(int SAMPLE_RATE, int INPUT_PIN) {
-	// Calculate elapsed time
-	static unsigned long past = 0;
-	unsigned long present = micros();
-	unsigned long interval = present - past;
-	past = present;
-
-	// Run timer
-	static long timer = 0;
-	timer -= interval;
+float Filters::ECG_read(int SAMPLE_RATE, int INPUT_PIN) {
+  
 
 	// Sample
-	if(timer < 0){
-		timer += 1000000 / SAMPLE_RATE;
+	if(timer() < 0){
+		timer() += 1000000 / SAMPLE_RATE;
 		float sensor_value = analogRead(INPUT_PIN);
 		float signal = EMGFilter(sensor_value);
 		Serial.println(signal);
 	}
 }
 
-void loop_EOG(int SAMPLE_RATE, int INPUT_PIN) {
-	// Calculate elapsed time
-	static unsigned long past = 0;
-	unsigned long present = micros();
-	unsigned long interval = present - past;
-	past = present;
-
-	// Run timer
-	static long timer = 0;
-	timer -= interval;
+float Filters::EOG_read(int SAMPLE_RATE, int INPUT_PIN) {
+	
 
 	// Sample
-	if(timer < 0){
-		timer += 1000000 / SAMPLE_RATE;
+	if(timer() < 0){
+		timer() += 1000000 / SAMPLE_RATE;
 		float sensor_value = analogRead(INPUT_PIN);
 		float signal = EMGFilter(sensor_value);
 		Serial.println(signal);
 	}
 }
+
+///////////////////////////////////////////////////////////
+
+bool Filters::Getpeak(float new_sample)
+{
+  // Buffers for data, mean, and standard deviation
+  static float data_buffer[DATA_LENGTH];
+  static float mean_buffer[DATA_LENGTH];
+  static float standard_deviation_buffer[DATA_LENGTH];
+  
+  // Check for peak
+  if (new_sample - mean_buffer[data_index] > (DATA_LENGTH*1.2) * standard_deviation_buffer[data_index]) {
+    data_buffer[data_index] = new_sample + data_buffer[data_index];
+    peak = true;
+  } else {
+    data_buffer[data_index] = new_sample;
+    peak = false;
+  }
+
+  // Calculate mean
+  float sum = 0.0, mean, standard_deviation = 0.0;
+  for (int i = 0; i < DATA_LENGTH; ++i){
+    sum += data_buffer[(data_index + i) % DATA_LENGTH];
+  }
+  mean = sum/DATA_LENGTH;
+
+  // Calculate standard deviation
+  for (int i = 0; i < DATA_LENGTH; ++i){
+    standard_deviation += pow(data_buffer[(i) % DATA_LENGTH] - mean, 2);
+  }
+
+  // Update mean buffer
+  mean_buffer[data_index] = mean;
+
+  // Update standard deviation buffer
+  standard_deviation_buffer[data_index] =  sqrt(standard_deviation/DATA_LENGTH);
+
+  // Update data_index
+  data_index = (data_index+1)%DATA_LENGTH;
+
+  // Return peak
+  return peak;
+}
+
 
 float Filters::ECGFilter(float input)
 {
