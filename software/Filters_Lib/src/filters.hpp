@@ -1,5 +1,5 @@
-#ifndef FILTERS_H
-#define FILTERS_H
+#ifndef FILTERS_HPP
+#define FILTERS_HPP
 
 #include "Arduino.h"
 
@@ -8,7 +8,7 @@ class Filters
     public:
 
         float timer();
-        bool Getpeak();
+        bool Getpeak(float new_sample, int DATA_LENGTH);
 
         float ECG_read(int SAMPLE_RATE, int INPUT_PIN);
         float EMG_read(int SAMPLE_RATE, int INPUT_PIN);

@@ -1,6 +1,7 @@
-#include "filters.h"
+#include "filters.hpp"
 
 int data_index = 0;
+bool peak = false;
 
 
 float Filters::timer()
@@ -21,60 +22,68 @@ float Filters::timer()
 
 float Filters::EMG_read(int SAMPLE_RATE, int INPUT_PIN) {
 	
-
+  float signal;
+  float t = timer();
 	// Sample
-	if(timer() < 0){
-		timer() += 1000000 / SAMPLE_RATE;
+	if(t < 0){
+		t += (1000000)/(SAMPLE_RATE);
 		float sensor_value = analogRead(INPUT_PIN);
-		float signal = EMGFilter(sensor_value);
+		signal = EMGFilter(sensor_value);
 		Serial.println(signal);
 	}
+  return signal;
 }
 
 float Filters::EEG_read(int SAMPLE_RATE, int INPUT_PIN) {
 	
-
+  float signal;
+  float t = timer();
 	// Sample
-	if(timer() < 0){
-		timer() += 1000000 / SAMPLE_RATE;
+	if(t < 0){
+		t += (1000000)/(SAMPLE_RATE);
 		float sensor_value = analogRead(INPUT_PIN);
-		float signal = EMGFilter(sensor_value);
+		signal = EMGFilter(sensor_value);
 		Serial.println(signal);
 	}
+  return signal;
 }
 
 float Filters::ECG_read(int SAMPLE_RATE, int INPUT_PIN) {
   
-
+  float signal;
+  float t = timer();
 	// Sample
-	if(timer() < 0){
-		timer() += 1000000 / SAMPLE_RATE;
+	if(t < 0){
+		t += (1000000)/(SAMPLE_RATE);
 		float sensor_value = analogRead(INPUT_PIN);
-		float signal = EMGFilter(sensor_value);
+		signal = EMGFilter(sensor_value);
 		Serial.println(signal);
 	}
+  return signal;
 }
 
 float Filters::EOG_read(int SAMPLE_RATE, int INPUT_PIN) {
 	
-
+  float signal;
+  float t = timer();
 	// Sample
-	if(timer() < 0){
-		timer() += 1000000 / SAMPLE_RATE;
+	if(t < 0){
+		t += (1000000)/(SAMPLE_RATE);
 		float sensor_value = analogRead(INPUT_PIN);
-		float signal = EMGFilter(sensor_value);
+		signal = EMGFilter(sensor_value);
 		Serial.println(signal);
 	}
+  return signal;
 }
 
 ///////////////////////////////////////////////////////////
 
-bool Filters::Getpeak(float new_sample)
+bool Filters::Getpeak(float new_sample, int DATA_LENGTH)
 {
   // Buffers for data, mean, and standard deviation
-  static float data_buffer[DATA_LENGTH];
-  static float mean_buffer[DATA_LENGTH];
-  static float standard_deviation_buffer[DATA_LENGTH];
+   float data_buffer[DATA_LENGTH];
+   float mean_buffer[DATA_LENGTH];
+   float standard_deviation_buffer[DATA_LENGTH];
   
   // Check for peak
   if (new_sample - mean_buffer[data_index] > (DATA_LENGTH*1.2) * standard_deviation_buffer[data_index]) {
@@ -109,6 +118,8 @@ bool Filters::Getpeak(float new_sample)
   // Return peak
   return peak;
 }
+
+/////////////////////////////////////////////////////////////
 
 
 float Filters::ECGFilter(float input)
