@@ -6,6 +6,7 @@ A multi channel supported library for Bio Potential Filters which means that we 
 ## Features
 
 | **Features** | **Description** |
+| :-----: | :---------:
 |[Multi-Channel Supported](#multi-channel) | Multiple ADCs can be setup simultaneously for efficient processing |
 |[Variable Sampling Rate](#variable-sampling-rate) | Different sampling rates can be used for different ADCs |
 |[Variable Filtering Algorithms](#variable-filtering-algorithms) | EMG, EOG, ECG, EEG Filters can be used with this library |
