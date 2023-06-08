@@ -6,6 +6,7 @@ A multi channel supported library for Bio Potential Filters which means that we 
 ## Features
 
 | **Features** | **Description** |
+|:----:|:-------:| 
 |[Multi-Channel Supported](#multi-channel) | Multiple ADCs can be setup at the same time |
 |[Variable Sampling Rate](#variable-sampling-rate) | Different sampling rates can be used for different ADCs |
 |[Easy Access to the readings](#easy-access) | Readings can be accessed easily with the help of library | 
