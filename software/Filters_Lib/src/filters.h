@@ -1,5 +1,5 @@
-#ifndef FILTERS_HPP
-#define FILTERS_HPP
+#ifndef FILTERS_H
+#define FILTERS_H
 
 #include "Arduino.h"
 

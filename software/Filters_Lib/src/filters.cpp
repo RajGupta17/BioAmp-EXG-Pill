@@ -1,4 +1,4 @@
-#include "filters.hpp"
+#include "filters.h"
 
 int data_index = 0;
 bool peak = false;
@@ -172,7 +172,7 @@ float Filters::EEGFilter(float input)
 		output = 1.00000000*x + 2.00000000*z1 + 1.00000000*z2;
 		z2 = z1;
 		z1 = x;
-	}
+	} 
 	{
 		static float z1, z2; // filter section state
 		float x = output - -1.97690645*z1 - 0.97706395*z2;
