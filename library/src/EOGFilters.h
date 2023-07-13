@@ -15,3 +15,5 @@ class EOGFilters
     bool m_enableHPF = false;
     bool m_enableLPF = false;
 };
+
+#endif
